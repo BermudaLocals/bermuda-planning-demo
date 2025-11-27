@@ -573,7 +573,7 @@
             <!-- Track Application Tab -->
             <div id="track-tab" class="hidden">
                 <div class="search-filter">
-                    <input type="text" id="tracking-id" placeholder="Enter Application ID (e.g., PA-2025-1008)">
+                    <input type="text" id="tracking-id" placeholder="Enter Application ID (e.g., GN1037/2025)">
                     <button class="btn btn-primary" onclick="trackApplication()">Track Application</button>
                 </div>
                 <div id="tracking-result"></div>
@@ -586,7 +586,7 @@
         <div class="modal-content">
             <h2>New Planning Application</h2>
             <form onsubmit="submitApplication(event)">
-                <input type="text" id="app-id" placeholder="Application ID (e.g., PA-2025-1008)" required>
+                <input type="text" id="app-id" placeholder="Application ID (e.g., GN1037/2025)" required>
                 <input type="text" id="applicant-name" placeholder="Applicant Name" required>
                 <input type="text" id="property-address" placeholder="Property Address" required>
                 <select id="app-type" required>
@@ -596,6 +596,10 @@
                     <option value="Change of Use">Change of Use</option>
                     <option value="Demolition">Demolition</option>
                     <option value="Subdivision">Subdivision</option>
+                    <option value="Retaining Wall">Retaining Wall</option>
+                    <option value="New Construction / Duplex">New Construction / Duplex</option>
+                    <option value="Additions / Renovation">Additions / Renovation</option>
+                    <option value="Retaining Wall / Sidewalk Modification">Retaining Wall / Sidewalk Modification</option>
                 </select>
                 <textarea id="description" placeholder="Brief Description" required></textarea>
                 <input type="date" id="submit-date" required>
@@ -653,7 +657,17 @@
         let applications = JSON.parse(localStorage.getItem('planning_applications')) || [
             { id:1, appId:'PA-2024-1001', applicantName:'Sarah Johnson', propertyAddress:'45 South Road, Paget', appType:'Renovation', description:'Two-story addition to existing residence', submitDate:'2024-11-01', status:'review', currentStage:'Conservation', contactEmail:'sjohnson@email.bm'},
             { id:2, appId:'PA-2024-1002', applicantName:'Michael Chen', propertyAddress:'12 Harbour Road, Hamilton', appType:'New Construction', description:'Commercial office building - 3 stories', submitDate:'2024-11-10', status:'submitted', currentStage:'Initial Review', contactEmail:'mchen@realty.bm'},
-            { id:3, appId:'PA-2024-1003', applicantName:'Emily Thompson', propertyAddress:'78 Middle Road, Southampton', appType:'Change of Use', description:'Convert residential to commercial retail', submitDate:'2024-10-15', status:'approved', currentStage:'Completed', contactEmail:'ethompson@email.bm'}
+            { id:3, appId:'PA-2024-1003', applicantName:'Emily Thompson', propertyAddress:'78 Middle Road, Southampton', appType:'Change of Use', description:'Convert residential to commercial retail', submitDate:'2024-10-15', status:'approved', currentStage:'Completed', contactEmail:'ethompson@email.bm'},
+            { id:4, appId:'PA-2024-1004', applicantName:'David Brown', propertyAddress:'22 Church Street, Hamilton', appType:'Demolition', description:'Demolish old warehouse for redevelopment', submitDate:'2024-11-05', status:'review', currentStage:'Planning Review', contactEmail:'dbrown@construction.bm'},
+            { id:5, appId:'PA-2024-1005', applicantName:'Olivia Green', propertyAddress:'90 Front Street, St. George', appType:'Subdivision', description:'Divide land into 3 residential lots', submitDate:'2024-10-28', status:'approved', currentStage:'Completed', contactEmail:'ogreen@landdev.bm'},
+            { id:6, appId:'PA-2024-1006', applicantName:'James Smith', propertyAddress:'15 King Street, Pembroke', appType:'Renovation', description:'Renovate historic townhouse', submitDate:'2024-11-12', status:'submitted', currentStage:'Initial Review', contactEmail:'jsmith@email.bm'},
+            { id:7, appId:'PA-2024-1007', applicantName:'Sophia Lee', propertyAddress:'3 Queen Street, Hamilton', appType:'New Construction', description:'Construct new retail complex', submitDate:'2024-11-08', status:'review', currentStage:'Planning Review', contactEmail:'slee@retail.bm'},
+            { id:8, appId:'PA-2024-1008', applicantName:'William Turner', propertyAddress:'57 Bay Road, Warwick', appType:'Change of Use', description:'Convert office to apartments', submitDate:'2024-11-02', status:'rejected', currentStage:'Rejected', contactEmail:'wturner@housing.bm'},
+            { id:9, appId:'PA-2024-1009', applicantName:'Isabella Martinez', propertyAddress:'88 Middle Road, Southampton', appType:'Subdivision', description:'Split property into 2 commercial lots', submitDate:'2024-11-15', status:'submitted', currentStage:'Initial Review', contactEmail:'imartinez@email.bm'},
+            { id:10, appId:'PA-2024-1010', applicantName:'Liam Wilson', propertyAddress:'12 Court Street, Hamilton', appType:'Renovation', description:'Add extension to office building', submitDate:'2024-11-09', status:'review', currentStage:'Planning Review', contactEmail:'lwilson@office.bm'},
+            { id: 11, appId: 'GN1037/2025', applicantName: 'Jerry Webb', propertyAddress: '7 Gatehouse Lane, Sandys', appType: 'New Construction / Duplex', description: 'Two‑storey detached house with 2 units, attached garage, driveway/parking and retaining walls', submitDate: '2025-11-17', status: 'submitted', currentStage: 'Initial Review', contactEmail: ''},
+            { id: 12, appId: 'GN1022/2025', applicantName: 'Charles Butterfield', propertyAddress: '1 Between the Walls, Pembroke', appType: 'Retaining Wall / Sidewalk Modification', description: 'Retaining wall, roadside sidewalk and remove existing stairs', submitDate: '2025-11-10', status: 'submitted', currentStage: 'Initial Review', contactEmail: ''},
+            { id: 13, appId: 'GN0834/2025', applicantName: 'Charles Ndiaye', propertyAddress: '118 Middle Road, Southampton', appType: 'Additions / Renovation', description: 'Lower‑floor additions, new upper‑storey master suite, garden shed and landscape works', submitDate: '2025-08-29', status: 'submitted', currentStage: 'Initial Review', contactEmail: ''}
         ];
 
         function calculateDaysSince(date){
