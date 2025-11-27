@@ -655,6 +655,26 @@
 
     <script>
         let applications = JSON.parse(localStorage.getItem('planning_applications')) || [
+            // Recent applications (last 4 weeks)
+            { id: 11, appId: 'GN1037/2025', applicantName: 'Jerry Webb', propertyAddress: '7 Gatehouse Lane, Sandys', appType: 'New Construction / Duplex', description: 'Two‑storey detached house with 2 units, attached garage, driveway/parking and retaining walls', submitDate: '2025-11-17', status: 'submitted', currentStage: 'Initial Review', contactEmail: 'jerry.webb@email.bm'},
+            { id: 12, appId: 'GN1022/2025', applicantName: 'Charles Butterfield', propertyAddress: '1 Between the Walls, Pembroke', appType: 'Retaining Wall / Sidewalk Modification', description: 'Retaining wall, roadside sidewalk and remove existing stairs', submitDate: '2025-11-10', status: 'submitted', currentStage: 'Initial Review', contactEmail: 'c.butterfield@email.bm'},
+            { id: 13, appId: 'GN1015/2025', applicantName: 'Maria Rodriguez', propertyAddress: '23 Harbour Road, Paget', appType: 'Additions / Renovation', description: 'Single-storey extension to rear of property and interior renovation', submitDate: '2025-11-05', status: 'review', currentStage: 'Planning Review', contactEmail: 'm.rodriguez@email.bm'},
+            { id: 14, appId: 'GN1008/2025', applicantName: 'Thomas Wilson', propertyAddress: '45 South Road, Warwick', appType: 'New Construction', description: 'Detached single-family residence with pool and landscaping', submitDate: '2025-10-29', status: 'review', currentStage: 'Environmental Assessment', contactEmail: 't.wilson@email.bm'},
+            
+            // Applications from 5-8 weeks ago
+            { id: 15, appId: 'GN0992/2025', applicantName: 'Lisa Patterson', propertyAddress: '12 Middle Road, Southampton', appType: 'Change of Use', description: 'Convert ground floor from residential to professional office', submitDate: '2025-10-15', status: 'approved', currentStage: 'Completed', contactEmail: 'l.patterson@email.bm'},
+            { id: 16, appId: 'GN0985/2025', applicantName: 'Robert Greene', propertyAddress: '8 Church Street, Hamilton', appType: 'Renovation', description: 'Facade restoration and interior refurbishment of historic building', submitDate: '2025-10-08', status: 'review', currentStage: 'Heritage Review', contactEmail: 'r.greene@email.bm'},
+            { id: 17, appId: 'GN0978/2025', applicantName: 'Jennifer Taylor', propertyAddress: '34 North Shore Road, Hamilton Parish', appType: 'Demolition', description: 'Demolish existing structure and site clearance', submitDate: '2025-10-01', status: 'approved', currentStage: 'Completed', contactEmail: 'j.taylor@email.bm'},
+            { id: 18, appId: 'GN0971/2025', applicantName: 'David Chen', propertyAddress: '56 Front Street, St. George', appType: 'Retaining Wall', description: 'Construction of 2.5m retaining wall along property boundary', submitDate: '2025-09-24', status: 'review', currentStage: 'Engineering Review', contactEmail: 'd.chen@email.bm'},
+            
+            // Applications from 9-12 weeks ago
+            { id: 19, appId: 'GN0964/2025', applicantName: 'Sarah Johnson', propertyAddress: '78 Berry Hill Road, Paget', appType: 'Subdivision', description: 'Subdivide property into two residential lots', submitDate: '2025-09-17', status: 'approved', currentStage: 'Completed', contactEmail: 's.johnson@email.bm'},
+            { id: 20, appId: 'GN0957/2025', applicantName: 'Michael Brown', propertyAddress: '90 South Road, Devonshire', appType: 'New Construction / Duplex', description: 'Two-unit residential building with shared driveway', submitDate: '2025-09-10', status: 'approved', currentStage: 'Completed', contactEmail: 'm.brown@email.bm'},
+            { id: 21, appId: 'GN0950/2025', applicantName: 'Amanda White', propertyAddress: '15 Harbour Road, Paget', appType: 'Additions / Renovation', description: 'Second-storey addition and complete interior renovation', submitDate: '2025-09-03', status: 'approved', currentStage: 'Completed', contactEmail: 'a.white@email.bm'},
+            { id: 22, appId: 'GN0943/2025', applicantName: 'Christopher Lee', propertyAddress: '27 Middle Road, Warwick', appType: 'Retaining Wall / Sidewalk Modification', description: 'Retaining wall reconstruction and sidewalk improvements', submitDate: '2025-08-27', status: 'approved', currentStage: 'Completed', contactEmail: 'c.lee@email.bm'},
+            { id: 23, appId: 'GN0834/2025', applicantName: 'Charles Ndiaye', propertyAddress: '118 Middle Road, Southampton', appType: 'Additions / Renovation', description: 'Lower‑floor additions, new upper‑storey master suite, garden shed and landscape works', submitDate: '2025-08-29', status: 'approved', currentStage: 'Completed', contactEmail: 'c.ndiaye@email.bm'},
+            
+            // Older applications (kept for reference)
             { id:1, appId:'PA-2024-1001', applicantName:'Sarah Johnson', propertyAddress:'45 South Road, Paget', appType:'Renovation', description:'Two-story addition to existing residence', submitDate:'2024-11-01', status:'review', currentStage:'Conservation', contactEmail:'sjohnson@email.bm'},
             { id:2, appId:'PA-2024-1002', applicantName:'Michael Chen', propertyAddress:'12 Harbour Road, Hamilton', appType:'New Construction', description:'Commercial office building - 3 stories', submitDate:'2024-11-10', status:'submitted', currentStage:'Initial Review', contactEmail:'mchen@realty.bm'},
             { id:3, appId:'PA-2024-1003', applicantName:'Emily Thompson', propertyAddress:'78 Middle Road, Southampton', appType:'Change of Use', description:'Convert residential to commercial retail', submitDate:'2024-10-15', status:'approved', currentStage:'Completed', contactEmail:'ethompson@email.bm'},
@@ -664,10 +684,7 @@
             { id:7, appId:'PA-2024-1007', applicantName:'Sophia Lee', propertyAddress:'3 Queen Street, Hamilton', appType:'New Construction', description:'Construct new retail complex', submitDate:'2024-11-08', status:'review', currentStage:'Planning Review', contactEmail:'slee@retail.bm'},
             { id:8, appId:'PA-2024-1008', applicantName:'William Turner', propertyAddress:'57 Bay Road, Warwick', appType:'Change of Use', description:'Convert office to apartments', submitDate:'2024-11-02', status:'rejected', currentStage:'Rejected', contactEmail:'wturner@housing.bm'},
             { id:9, appId:'PA-2024-1009', applicantName:'Isabella Martinez', propertyAddress:'88 Middle Road, Southampton', appType:'Subdivision', description:'Split property into 2 commercial lots', submitDate:'2024-11-15', status:'submitted', currentStage:'Initial Review', contactEmail:'imartinez@email.bm'},
-            { id:10, appId:'PA-2024-1010', applicantName:'Liam Wilson', propertyAddress:'12 Court Street, Hamilton', appType:'Renovation', description:'Add extension to office building', submitDate:'2024-11-09', status:'review', currentStage:'Planning Review', contactEmail:'lwilson@office.bm'},
-            { id: 11, appId: 'GN1037/2025', applicantName: 'Jerry Webb', propertyAddress: '7 Gatehouse Lane, Sandys', appType: 'New Construction / Duplex', description: 'Two‑storey detached house with 2 units, attached garage, driveway/parking and retaining walls', submitDate: '2025-11-17', status: 'submitted', currentStage: 'Initial Review', contactEmail: ''},
-            { id: 12, appId: 'GN1022/2025', applicantName: 'Charles Butterfield', propertyAddress: '1 Between the Walls, Pembroke', appType: 'Retaining Wall / Sidewalk Modification', description: 'Retaining wall, roadside sidewalk and remove existing stairs', submitDate: '2025-11-10', status: 'submitted', currentStage: 'Initial Review', contactEmail: ''},
-            { id: 13, appId: 'GN0834/2025', applicantName: 'Charles Ndiaye', propertyAddress: '118 Middle Road, Southampton', appType: 'Additions / Renovation', description: 'Lower‑floor additions, new upper‑storey master suite, garden shed and landscape works', submitDate: '2025-08-29', status: 'submitted', currentStage: 'Initial Review', contactEmail: ''}
+            { id:10, appId:'PA-2024-1010', applicantName:'Liam Wilson', propertyAddress:'12 Court Street, Hamilton', appType:'Renovation', description:'Add extension to office building', submitDate:'2024-11-09', status:'review', currentStage:'Planning Review', contactEmail:'lwilson@office.bm'}
         ];
 
         function calculateDaysSince(date){
@@ -676,9 +693,12 @@
         }
 
         function renderApplications(appsToRender=applications){
+            // Sort applications by submitDate (most recent first)
+            const sortedApps = [...appsToRender].sort((a, b) => new Date(b.submitDate) - new Date(a.submitDate));
+            
             const tbody = document.getElementById('applications-tbody');
             tbody.innerHTML='';
-            appsToRender.forEach(app=>{
+            sortedApps.forEach(app=>{
                 const days=calculateDaysSince(app.submitDate);
                 const statusClass=app.status==='approved'?'status-approved':app.status==='rejected'?'status-rejected':app.status==='review'?'status-review':'status-submitted';
                 const statusText=app.status==='approved'?'Approved':app.status==='rejected'?'Rejected':app.status==='review'?'Under Review':'Submitted';
@@ -707,7 +727,8 @@
         function filterApplications(){
             const term=document.getElementById('search-input').value.toLowerCase();
             const status=document.getElementById('filter-status').value;
-            renderApplications(applications.filter(a=>(a.applicantName.toLowerCase().includes(term)||a.propertyAddress.toLowerCase().includes(term)||a.appId.toLowerCase().includes(term))&&(status==='all'||a.status===status)));
+            const filteredApps = applications.filter(a=>(a.applicantName.toLowerCase().includes(term)||a.propertyAddress.toLowerCase().includes(term)||a.appId.toLowerCase().includes(term))&&(status==='all'||a.status===status));
+            renderApplications(filteredApps);
         }
 
         function showNewApplicationModal(){ 
