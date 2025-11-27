@@ -1,0 +1,237 @@
+<script>
+    // Demo data with more realistic variety
+    let applications = JSON.parse(localStorage.getItem('planning_applications')) || [
+        {
+            id: 1,
+            appId: 'PA-2024-1001',
+            applicantName: 'Sarah Johnson',
+            propertyAddress: '45 South Road, Paget',
+            appType: 'Renovation',
+            description: 'Two-story addition to existing residence',
+            submitDate: '2024-11-01',
+            status: 'review',
+            currentStage: 'Conservation',
+            contactEmail: 'sjohnson@email.bm'
+        },
+        {
+            id: 2,
+            appId: 'PA-2024-1002',
+            applicantName: 'Michael Chen',
+            propertyAddress: '12 Harbour Road, Hamilton',
+            appType: 'New Construction',
+            description: 'Commercial office building - 3 stories',
+            submitDate: '2024-11-10',
+            status: 'submitted',
+            currentStage: 'Initial Review',
+            contactEmail: 'mchen@realty.bm'
+        },
+        {
+            id: 3,
+            appId: 'PA-2024-1003',
+            applicantName: 'Emily Thompson',
+            propertyAddress: '78 Middle Road, Southampton',
+            appType: 'Change of Use',
+            description: 'Convert residential to commercial retail',
+            submitDate: '2024-10-15',
+            status: 'approved',
+            currentStage: 'Completed',
+            contactEmail: 'ethompson@email.bm'
+        },
+        {
+            id: 4,
+            appId: 'PA-2025-1004',
+            applicantName: 'David Parker',
+            propertyAddress: '99 Front Street, Hamilton',
+            appType: 'Demolition',
+            description: 'Remove old warehouse and prepare lot for new build',
+            submitDate: '2025-01-22',
+            status: 'review',
+            currentStage: 'Engineering',
+            contactEmail: 'dparker@email.bm'
+        },
+        {
+            id: 5,
+            appId: 'PA-2025-1005',
+            applicantName: 'Linda Marshall',
+            propertyAddress: '200 Middle Road, Devonshire',
+            appType: 'Subdivision',
+            description: 'Divide property into three residential lots',
+            submitDate: '2025-03-05',
+            status: 'submitted',
+            currentStage: 'Initial Review',
+            contactEmail: 'lmarshall@email.bm'
+        },
+        {
+            id: 6,
+            appId: 'PA-2025-1006',
+            applicantName: 'Robert Lee',
+            propertyAddress: '56 Court Street, Hamilton',
+            appType: 'Renovation',
+            description: 'Refurbish historic building for commercial use',
+            submitDate: '2025-02-14',
+            status: 'approved',
+            currentStage: 'Completed',
+            contactEmail: 'rlee@email.bm'
+        },
+        {
+            id: 7,
+            appId: 'PA-2025-1007',
+            applicantName: 'Aisha Brown',
+            propertyAddress: '22 Harbour View, St George’s',
+            appType: 'Change of Use',
+            description: 'Convert office space into apartments',
+            submitDate: '2025-04-10',
+            status: 'rejected',
+            currentStage: 'Planning Committee',
+            contactEmail: 'abrown@email.bm'
+        }
+    ];
+
+    function calculateDaysSince(date) {
+        const today = new Date();
+        const submitDate = new Date(date);
+        const diffTime = today - submitDate;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays;
+    }
+
+    function renderApplications(appsToRender = applications) {
+        const tbody = document.getElementById('applications-tbody');
+        tbody.innerHTML = '';
+
+        appsToRender.forEach(app => {
+            const daysSince = calculateDaysSince(app.submitDate);
+            const statusClass = app.status === 'approved' ? 'status-approved' : 
+                               app.status === 'rejected' ? 'status-rejected' : 
+                               app.status === 'review' ? 'status-review' :
+                               'status-submitted';
+            const statusText = app.status === 'approved' ? 'Approved' : 
+                              app.status === 'rejected' ? 'Rejected' : 
+                              app.status === 'review' ? 'Under Review' :
+                              'Submitted';
+            const row = `
+                <tr>
+                    <td><strong>${app.appId}</strong></td>
+                    <td>${app.applicantName}</td>
+                    <td>${app.propertyAddress}</td>
+                    <td>${app.appType}</td>
+                    <td>${new Date(app.submitDate).toLocaleDateString()}<br><small>${daysSince} days ago</small></td>
+                    <td><span class="workflow-stage">${app.currentStage}</span></td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 12px;" onclick="viewApplication(${app.id})">View</button>
+                    </td>
+                </tr>
+            `;
+            tbody.innerHTML += row;
+        });
+
+        updateStats();
+    }
+
+    function updateStats() {
+        const totalActive = applications.filter(a => a.status !== 'approved' && a.status !== 'rejected').length;
+        const pendingReview = applications.filter(a => a.status === 'review').length;
+        const approvedMonth = applications.filter(a => a.status === 'approved').length;
+
+        document.getElementById('total-applications').textContent = applications.length;
+        document.getElementById('pending-review').textContent = pendingReview;
+        document.getElementById('approved-month').textContent = approvedMonth;
+    }
+
+    function filterApplications() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        const statusFilter = document.getElementById('filter-status').value;
+
+        const filtered = applications.filter(app => {
+            const matchesSearch = app.applicantName.toLowerCase().includes(searchTerm) ||
+                                  app.propertyAddress.toLowerCase().includes(searchTerm) ||
+                                  app.appId.toLowerCase().includes(searchTerm);
+            const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
+            return matchesSearch && matchesStatus;
+        });
+
+        renderApplications(filtered);
+    }
+
+    function showNewApplicationModal() {
+        document.getElementById('new-application-modal').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('new-application-modal').classList.remove('active');
+    }
+
+    function submitApplication(event) {
+        event.preventDefault();
+
+        const newApp = {
+            id: applications.length + 1,
+            appId: document.getElementById('app-id').value,
+            applicantName: document.getElementById('applicant-name').value,
+            propertyAddress: document.getElementById('property-address').value,
+            appType: document.getElementById('app-type').value,
+            description: document.getElementById('description').value,
+            submitDate: document.getElementById('submit-date').value,
+            status: 'submitted',
+            currentStage: 'Initial Review',
+            contactEmail: document.getElementById('contact-email').value
+        };
+
+        applications.push(newApp);
+        localStorage.setItem('planning_applications', JSON.stringify(applications));
+
+        renderApplications();
+        closeModal();
+        event.target.reset();
+
+        alert('✅ Planning application submitted successfully!\n\nApplication ID: ' + newApp.appId);
+    }
+
+    function viewApplication(id) {
+        const app = applications.find(a => a.id === id);
+        alert(`Application Details:\n\nID: ${app.appId}\nApplicant: ${app.applicantName}\nProperty: ${app.propertyAddress}\nType: ${app.appType}\nStatus: ${app.status}\nCurrent Stage: ${app.currentStage}\n\nDescription: ${app.description}`);
+    }
+
+    function trackApplication() {
+        const trackingId = document.getElementById('tracking-id').value.toUpperCase();
+        const app = applications.find(a => a.appId.toUpperCase() === trackingId);
+
+        const resultDiv = document.getElementById('tracking-result');
+
+        if (app) {
+            const daysSince = calculateDaysSince(app.submitDate);
+            resultDiv.innerHTML = `
+                <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <h3 style="color: #dc2626; margin-bottom: 20px;">Application Found: ${app.appId}</h3>
+                    <div style="text-align: left; max-width: 500px; margin: 0 auto;">
+                        <p><strong>Applicant:</strong> ${app.applicantName}</p>
+                        <p><strong>Property:</strong> ${app.propertyAddress}</p>
+                        <p><strong>Type:</strong> ${app.appType}</p>
+                        <p><strong>Submitted:</strong> ${new Date(app.submitDate).toLocaleDateString()} (${daysSince} days ago)</p>
+                        <p><strong>Current Stage:</strong> <span class="workflow-stage">${app.currentStage}</span></p>
+                        <p><strong>Status:</strong> <span class="status-badge status-${app.status}">${app.status}</span></p>
+                    </div>
+                </div>
+            `;
+        } else {
+            resultDiv.innerHTML = `
+                <div style="background: #fee2e2; padding: 20px; border-radius: 10px; color: #991b1b;">
+                    <strong>Application not found.</strong><br>
+                    Please check your Application ID and try again.
+                </div>
+            `;
+        }
+    }
+
+    function showTab(tabName) {
+        document.querySelectorAll('[id$="-tab"]').forEach(tab => tab.classList.add('hidden'));
+        document.getElementById(tabName + '-tab').classList.remove('hidden');
+
+        document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    // Initialize on page load
+    renderApplications();
+</script>
